@@ -7,6 +7,145 @@
     <title>Bafômetro - Compra</title>
 </head>
 <body>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="form.css">
+    <title>Bafômetro - Compra</title>
+</head>
+<body>
+
+    <div class="container">
+        <form action="">
+            <div class="row">
+               
+                <div class="column">
+                    <h3 class="title">Endereço de Cobrança</h3>
+
+                    <div class="input-box">
+                        <span>Nome:</span>
+                        <input type="text" placeholder="Nome">
+                    </div>
+
+                    <div class="input-box">
+                        <span>Email:</span>
+                        <input type="email" placeholder="exemplo@gmail.com">
+                    </div>
+
+                    <div class="input-box">
+                        <span>CEP:</span>
+                        <input type="text" id="cep" placeholder="05266-100" maxlength="9" required>
+                    </div>
+
+                    <div class="input-box">
+                        <span>Endereço:</span>
+                        <input type="text" id="endereco" placeholder="Rua" readonly>
+                    </div>
+
+                    <div class="input-box">
+                        <span>Bairro:</span>
+                        <input type="text" id="bairro" placeholder="Bairro" readonly>
+                    </div>
+
+                    <div class="input-box">
+                        <span>Cidade:</span>
+                        <input type="text" id="cidade" placeholder="São Paulo" readonly>
+                    </div>
+
+                    <div class="flex">
+                        <div class="input-box">
+                            <span>Estado:</span>
+                            <input type="text" id="uf" placeholder="SP" readonly>
+                        </div>
+                        <div class="input-box">
+                            <span>País:</span>
+                            <input type="text" value="Brasil" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="column">
+                    <h3 class="title">Pagamento</h3>
+
+                    <div class="input-box">
+                        <span>Cartão:</span>
+                        <img src="imgcards.png" alt="Cartões">
+                    </div>
+
+                    <div class="input-box">
+                        <span>Nome do Cartão:</span>
+                        <input type="text">
+                    </div>
+
+                    <div class="input-box">
+                        <span>Número do Cartão:</span>
+                        <input type="text">
+                    </div>
+
+                    <div class="input-box">
+                        <span>Exp. Mês:</span>
+                        <input type="text">
+                    </div>
+
+                    <div class="input-box">
+                        <span>Exp. Ano:</span>
+                        <input type="text">
+                    </div>
+
+                    <div class="flex">
+                        <div class="input-box">
+                            <span>CVV:</span>
+                            <input type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Comprar</button>
+        </form>
+    </div>
+
+    
+    <script>
+        const cepInput = document.getElementById("cep");
+
+        
+        cepInput.addEventListener("input", function() {
+            this.value = this.value
+                .replace(/\D/g, '')           
+                .replace(/^(\d{5})(\d)/, '$1-$2') 
+                .substring(0, 9);             
+        });
+
+        
+        cepInput.addEventListener("blur", function() {
+            const cep = this.value.replace(/\D/g, '');
+
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById("endereco").value = data.logradouro;
+                            document.getElementById("bairro").value = data.bairro;
+                            document.getElementById("cidade").value = data.localidade;
+                            document.getElementById("uf").value = data.uf;
+                        } else {
+                            alert("CEP não encontrado!");
+                        }
+                    })
+                    .catch(() => alert("Erro ao buscar o CEP."));
+            } else {
+                alert("CEP inválido!");
+            }
+        });
+    </script>
+
+</body>
+</html>
 
     <!--Info - Endereço -->
 
@@ -88,4 +227,5 @@
         </form>
     </div>
 </body>
+
 </html>
